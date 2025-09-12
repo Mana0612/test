@@ -1,0 +1,23 @@
+name: Discord おはよう メッセージ
+
+on:
+  schedule:
+    # 毎日日本時間の8:00 AM (UTC 23:00) に実行
+    - cron: '0 23 * * *'
+  workflow_dispatch: # 手動実行も可能
+
+jobs:
+  send-ohayo-message:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Send Discord Message
+      run: |
+        curl -H "Content-Type: application/json" \
+             -X POST \
+             -d "{\"content\": \"おはよう！今日も一日頑張りましょう！ 🌅\"}" \
+             "https://discord.com/api/v10/channels/${{ secrets.DISCORD_CHANNEL_ID }}/messages" \
+             -H "Authorization: Bot ${{ secrets.DISCORD_BOT_TOKEN }}"
+      
+    - name: Log completion
+      run: echo "おはようメッセージを送信しました $(date)"
